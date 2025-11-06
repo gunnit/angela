@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Per l'Amore della Mia Vita</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Garamond', serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .slideshow-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+            z-index: 1;
+        }
+
+        .slide.text-slide {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+        }
+
+        .slide.text-slide.intro {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .slide.text-slide.chapter {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .slide.text-slide.final {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .text-content {
+            text-align: center;
+            color: white;
+            max-width: 800px;
+            animation: fadeInUp 2s ease;
+        }
+
+        .text-content h1 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .text-content p {
+            font-size: 1.8em;
+            line-height: 1.6;
+            font-style: italic;
+            opacity: 0.95;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+        }
+
+        .photo-slide {
+            background: #000;
+        }
+
+        .photo-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .photo-slide img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            animation: kenBurns 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes kenBurns {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hearts Animation */
+        .heart {
+            position: absolute;
+            font-size: 30px;
+            color: rgba(255, 105, 180, 0.7);
+            animation: float 6s ease-in infinite;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Controls */
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            gap: 15px;
+            background: rgba(0,0,0,0.5);
+            padding: 15px 30px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+        }
+
+        .controls button {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            font-family: 'Georgia', serif;
+        }
+
+        .controls button:hover {
+            background: rgba(255,255,255,0.4);
+            transform: scale(1.05);
+        }
+
+        .controls button:active {
+            transform: scale(0.95);
+        }
+
+        /* Music Player */
+        .music-player {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 1000;
+            background: rgba(0,0,0,0.5);
+            padding: 15px 25px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .music-player button {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .music-player button:hover {
+            background: rgba(255,255,255,0.4);
+            transform: scale(1.1);
+        }
+
+        .music-note {
+            color: white;
+            font-size: 20px;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+            z-index: 1001;
+            transition: width 0.3s;
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            z-index: 1000;
+            color: white;
+            font-size: 18px;
+            background: rgba(0,0,0,0.5);
+            padding: 10px 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .text-content h1 {
+                font-size: 2em;
+            }
+
+            .text-content p {
+                font-size: 1.2em;
+            }
+
+            .controls {
+                bottom: 15px;
+                padding: 10px 20px;
+                gap: 10px;
+            }
+
+            .controls button {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+
+            .music-player {
+                top: 15px;
+                right: 15px;
+                padding: 10px 15px;
+            }
+
+            .music-player button {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Slide Counter -->
+    <div class="slide-counter" id="slideCounter">1 / 1</div>
+
+    <!-- Music Player -->
+    <div class="music-player">
+        <button id="musicToggle" onclick="toggleMusic()">▶</button>
+        <span class="music-note">♫</span>
+        <audio id="bgMusic" loop>
+            <!-- Add your romantic song here -->
+            <source src="your-romantic-song.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <!-- Slideshow Container -->
+    <div class="slideshow-container" id="slideshowContainer">
+
+        <!-- Opening Slide -->
+        <div class="slide text-slide intro active">
+            <div class="text-content">
+                <h1>Per l'Amore della Mia Vita</h1>
+                <p>Un viaggio attraverso il nostro amore...<br>
+                Un viaggio che ha reso la mia vita completa...</p>
+            </div>
+        </div>
+
+        <!-- Chapter 1 Intro -->
+        <div class="slide text-slide chapter">
+            <div class="text-content">
+                <h1>Tutto È Iniziato Con Noi Due...</h1>
+                <p>Esplorando il mondo, mano nella mano<br>
+                Costruendo sogni, creando ricordi<br>
+                Era solo io e te contro il mondo</p>
+            </div>
+        </div>
+
+        <!-- Chapter 1 Photos: Just Us Two (2014-2018) -->
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/IMG_20140619_205914.jpg" alt="Il nostro inizio">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/IMG_20141223_165451.jpg" alt="Insieme">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/P_20160716_135516_BF.jpg" alt="Avventure">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/P_20160719_223039.jpg" alt="Momenti speciali">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/P_20160808_191309_BF.jpg" alt="Viaggi">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/P_20160814_190405_BF.jpg" alt="Scoperte">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/P_20160817_184847_BF.jpg" alt="Insieme">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/P_20160819_130045_BF.jpg" alt="Amore">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/IMG_0958.JPG" alt="Noi">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/P_20161210_131258.jpg" alt="Ricordi">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/IMG-20161215-WA0020.jpg" alt="Felicità">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/IMG-20161215-WA0027.jpg" alt="Sorrisi">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/2017_0101_020552_004.JPG" alt="Nuovo anno">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/IMG-20170307-WA052.jpg" alt="Primavera">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/P_20170408_180446_BF.jpg" alt="Passeggiate">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/P_20170416_112458_BF.jpg" alt="Giornate">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/IMG_1559.JPG" alt="Momenti">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/P_20170802_144056_BF.jpg" alt="Estate">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/P_20170803_132436_BF.jpg" alt="Sole">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/P_20171103_191656_BF.jpg" alt="Autunno">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/DSC_0348.JPG" alt="Bellezza">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20180714_200625.jpg" alt="Tramonti">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20180715_202542.jpg" alt="Notti">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20180809_102345.jpg" alt="Giorni">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/IMG_1695.JPG" alt="Noi due">
+            </div>
+        </div>
+
+        <!-- Transition Slide -->
+        <div class="slide text-slide chapter">
+            <div class="text-content">
+                <h1>E Poi...</h1>
+                <p>Il nostro amore ha creato qualcosa di magico<br>
+                Una piccola principessa<br>
+                Che ha reso il nostro mondo ancora più bello</p>
+            </div>
+        </div>
+
+        <!-- Chapter 2: First Daughter (2019-2020) -->
+        <div class="slide text-slide chapter">
+            <div class="text-content">
+                <h1>Sei Diventata Mamma</h1>
+                <p>E ho visto un nuovo amore nei tuoi occhi<br>
+                La donna che amavo è diventata la madre che ammiro<br>
+                La nostra famiglia era iniziata...</p>
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20190409_210409.jpg" alt="La nostra principessa">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20190605_211846.jpg" alt="Amore nuovo">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20190612_064601.jpg" alt="Momenti teneri">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20190618_195202.jpg" alt="Famiglia">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20190719_091439.jpg" alt="Crescere">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20190831_170709.jpg" alt="Insieme">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/IMG_2457.JPG" alt="Dolcezza">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20191121_200815.jpg" alt="Sorrisi">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20191123_142253.jpg" alt="Felicità">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/IMG-20191128-WA0001.jpg" alt="Amore">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20191225_155518.jpg" alt="Natale">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20191229_094236.jpg" alt="Fine anno">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20200106_153715.jpg" alt="Nuovo anno">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20200301_160639-EFFECTS.jpg" alt="Momenti">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/IMG_2492.JPG" alt="Gioia">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20200704_115434.jpg" alt="Estate">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/DSC_0728.JPG" alt="Bellezza">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20201112_175500_001.jpg" alt="Autunno">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20201130_101712.jpg" alt="Famiglia">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20201203_175039.jpg" alt="Inverno">
+            </div>
+        </div>
+
+        <!-- Transition Slide -->
+        <div class="slide text-slide chapter">
+            <div class="text-content">
+                <h1>Tre Anni Dopo...</h1>
+                <p>Un altro miracolo<br>
+                Il nostro piccolo principe<br>
+                La nostra famiglia era completa</p>
+            </div>
+        </div>
+
+        <!-- Chapter 3: Complete Family (2021-2023) -->
+        <div class="slide text-slide chapter">
+            <div class="text-content">
+                <h1>Ora Siamo Una Famiglia</h1>
+                <p>Due bambini meravigliosi<br>
+                Due cuori che abbiamo creato insieme<br>
+                Una famiglia perfetta<br>
+                Il nostro sogno realizzato</p>
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20210410_122638.jpg" alt="Famiglia di quattro">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20210701_193531.jpg" alt="Insieme">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20210813_190313.jpg" alt="Estate">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20210819_114018.jpg" alt="Vacanze">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20210819_151345.jpg" alt="Felicità">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/IMG_2889.JPG" alt="Amore">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20220302_061655.jpg" alt="Mattine">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/IMG_3968.JPG" alt="Momenti">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/20221017_162744.jpg" alt="Autunno">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/IMG_4206.JPG" alt="Crescere">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/IMG_5465~2.jpg" alt="Famiglia">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/IMG_20231103_142207.jpg" alt="Oggi">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/altAitZNUJ3IMbkPn6NNM7EwWy2vUpU3r71nWwWzL7ubFay.jpg" alt="Noi">
+            </div>
+        </div>
+
+        <div class="slide photo-slide">
+            <div class="photo-container">
+                <img src="Angela 41/ebcf7afc-f980-4b21-9061-71988be51e7e.jpg" alt="La nostra famiglia">
+            </div>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide text-slide final">
+            <div class="text-content">
+                <h1>Ti Amo</h1>
+                <p>Grazie per essere la mia compagna di vita<br>
+                Grazie per avermi dato una famiglia meravigliosa<br>
+                Grazie per ogni singolo giorno insieme<br><br>
+                Ti amo oggi più di ieri...<br>
+                E meno di domani<br><br>
+                Per sempre tuo ❤️</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button onclick="previousSlide()">◀ Indietro</button>
+        <button onclick="toggleAutoPlay()" id="autoPlayBtn">⏸ Pausa</button>
+        <button onclick="nextSlide()">Avanti ▶</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        let slides = document.querySelectorAll('.slide');
+        let totalSlides = slides.length;
+        let autoPlayInterval;
+        let isPlaying = true;
+        let musicPlaying = false;
+
+        // Initialize
+        document.getElementById('slideCounter').textContent = `1 / ${totalSlides}`;
+        updateProgressBar();
+
+        // Create floating hearts
+        setInterval(createHeart, 2000);
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = '❤';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            document.querySelector('.slideshow-container').appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 6000);
+        }
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = n;
+
+            if (currentSlide >= totalSlides) {
+                currentSlide = 0;
+            }
+            if (currentSlide < 0) {
+                currentSlide = totalSlides - 1;
+            }
+
+            slides[currentSlide].classList.add('active');
+            document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
+            updateProgressBar();
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        function toggleAutoPlay() {
+            const btn = document.getElementById('autoPlayBtn');
+            if (isPlaying) {
+                clearInterval(autoPlayInterval);
+                btn.textContent = '▶ Play';
+                isPlaying = false;
+            } else {
+                startAutoPlay();
+                btn.textContent = '⏸ Pausa';
+                isPlaying = true;
+            }
+        }
+
+        function startAutoPlay() {
+            autoPlayInterval = setInterval(() => {
+                nextSlide();
+            }, 5000); // Change slide every 5 seconds
+        }
+
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const btn = document.getElementById('musicToggle');
+
+            if (musicPlaying) {
+                music.pause();
+                btn.textContent = '▶';
+                musicPlaying = false;
+            } else {
+                music.play();
+                btn.textContent = '⏸';
+                musicPlaying = true;
+            }
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            } else if (e.key === ' ') {
+                e.preventDefault();
+                toggleAutoPlay();
+            }
+        });
+
+        // Touch swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                nextSlide();
+            }
+            if (touchEndX > touchStartX + 50) {
+                previousSlide();
+            }
+        }
+
+        // Start autoplay on load
+        startAutoPlay();
+
+        // Automatically start music after first interaction (browser policy)
+        document.addEventListener('click', () => {
+            const music = document.getElementById('bgMusic');
+            if (!musicPlaying && music.paused) {
+                // Music will be controlled by the music button
+            }
+        }, { once: true });
+    </script>
+</body>
+</html>
