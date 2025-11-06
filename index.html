@@ -256,6 +256,25 @@
             backdrop-filter: blur(10px);
         }
 
+        /* Photo Caption Overlay */
+        .photo-caption {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.5em;
+            font-style: italic;
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 1.5s ease;
+            text-align: center;
+            max-width: 80%;
+            z-index: 10;
+        }
+
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .text-content h1 {
@@ -288,6 +307,12 @@
                 height: 40px;
                 font-size: 16px;
             }
+
+            .photo-caption {
+                font-size: 1.1em;
+                padding: 10px 20px;
+                bottom: 60px;
+            }
         }
     </style>
 </head>
@@ -303,8 +328,7 @@
         <button id="musicToggle" onclick="toggleMusic()">▶</button>
         <span class="music-note">♫</span>
         <audio id="bgMusic" loop>
-            <!-- Add your romantic song here -->
-            <source src="your-romantic-song.mp3" type="audio/mpeg">
+            <source src="10 minute Romantic Music from EASound.mp3" type="audio/mpeg">
         </audio>
     </div>
 
@@ -334,6 +358,7 @@
         <div class="slide photo-slide">
             <div class="photo-container">
                 <img src="Angela 41/IMG_20140619_205914.jpg" alt="Il nostro inizio">
+                <div class="photo-caption">Il nostro primo passo insieme...</div>
             </div>
         </div>
 
@@ -346,6 +371,7 @@
         <div class="slide photo-slide">
             <div class="photo-container">
                 <img src="Angela 41/P_20160716_135516_BF.jpg" alt="Avventure">
+                <div class="photo-caption">Scoprendo il mondo con te...</div>
             </div>
         </div>
 
@@ -376,6 +402,7 @@
         <div class="slide photo-slide">
             <div class="photo-container">
                 <img src="Angela 41/P_20160819_130045_BF.jpg" alt="Amore">
+                <div class="photo-caption">Ogni momento con te è speciale</div>
             </div>
         </div>
 
@@ -394,6 +421,7 @@
         <div class="slide photo-slide">
             <div class="photo-container">
                 <img src="Angela 41/IMG-20161215-WA0020.jpg" alt="Felicità">
+                <div class="photo-caption">La mia felicità sei tu</div>
             </div>
         </div>
 
@@ -504,6 +532,7 @@
         <div class="slide photo-slide">
             <div class="photo-container">
                 <img src="Angela 41/20190409_210409.jpg" alt="La nostra principessa">
+                <div class="photo-caption">Il giorno più bello della nostra vita</div>
             </div>
         </div>
 
@@ -522,6 +551,7 @@
         <div class="slide photo-slide">
             <div class="photo-container">
                 <img src="Angela 41/20190618_195202.jpg" alt="Famiglia">
+                <div class="photo-caption">La nostra piccola stella</div>
             </div>
         </div>
 
@@ -564,6 +594,7 @@
         <div class="slide photo-slide">
             <div class="photo-container">
                 <img src="Angela 41/20191225_155518.jpg" alt="Natale">
+                <div class="photo-caption">Il nostro primo Natale insieme ❤️</div>
             </div>
         </div>
 
@@ -645,6 +676,7 @@
         <div class="slide photo-slide">
             <div class="photo-container">
                 <img src="Angela 41/20210410_122638.jpg" alt="Famiglia di quattro">
+                <div class="photo-caption">Il nostro piccolo principe è arrivato</div>
             </div>
         </div>
 
@@ -663,6 +695,7 @@
         <div class="slide photo-slide">
             <div class="photo-container">
                 <img src="Angela 41/20210819_114018.jpg" alt="Vacanze">
+                <div class="photo-caption">Avventure con tutta la famiglia</div>
             </div>
         </div>
 
@@ -705,6 +738,7 @@
         <div class="slide photo-slide">
             <div class="photo-container">
                 <img src="Angela 41/IMG_5465~2.jpg" alt="Famiglia">
+                <div class="photo-caption">La mia famiglia perfetta</div>
             </div>
         </div>
 
